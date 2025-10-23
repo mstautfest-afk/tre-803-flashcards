@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRE 803 Flashcards</title>
+<style>
+  body {
+    font-family: Georgia, serif;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    width: 80%;
+    max-width: 600px;
+    padding: 2em;
+    text-align: center;
+    transition: transform 0.4s;
+  }
+  .controls button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 6px;
+    background-color: #0066cc;
+    color: white;
+    cursor: pointer;
+  }
+  .controls button:hover {
+    background-color: #004c99;
+  }
+  .dark-mode {
+    background-color: #121212;
+    color: #ddd;
+  }
+</style>
+</head>
+<body>
+  <div class="card" id="flashcard">Loading...</div>
+  <div class="controls">
+    <button onclick="prevCard()">Previous</button>
+    <button onclick="flipCard()">Show Answer</button>
+    <button onclick="nextCard()">Next</button>
+    <button onclick="shuffleCards()">Shuffle</button>
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+  </div>
+
+<script>
+const cards = [
+  {front: 'TRE 803(1) — Present Sense Impression', back: 'Statement describing or explaining an event made while or immediately after perceiving it.'},
+  {front: 'TRE 803(2) — Excited Utterance', back: 'Statement relating to a startling event made while under stress of excitement.'},
+  {front: 'TRE 803(3) — Then-Existing Mental, Emotional, or Physical Condition', back: 'Statement of present state of mind or condition (e.g., intent, plan, feeling). Not memory or belief to prove fact remembered.'},
+  {front: 'TRE 803(4) — Statement Made for Medical Diagnosis or Treatment', back: 'Statement made for medical diagnosis or treatment describing symptoms or cause if pertinent.'},
+  {front: 'TRE 803(5) — Recorded Recollection', back: 'Record that accurately reflects witness’s prior knowledge, made when fresh; may be read into evidence.'},
+  {front: 'TRE 803(6) — Records of a Regularly Conducted Activity (Business Records)', back: 'Record made at/near time by someone with knowledge, kept in course of business, shown by custodian/testimony, unless untrustworthy.'},
+  {front: 'TRE 803(7) — Absence of a Record of a Regularly Conducted Activity', back: 'Evidence that a matter is not included in records kept per (6) to show it did not occur.'},
+  {front: 'TRE 803(8) — Public Records', back: 'Records of a public office setting out activities, observations, or factual findings made under legal duty, unless untrustworthy.'},
+  {front: 'TRE 803(9) — Public Records of Vital Statistics', back: 'Record of birth, death, marriage, etc., made to a public office pursuant to legal duty.'},
+  {front: 'TRE 803(10) — Absence of a Public Record', back: 'Testimony or certification that a diligent search failed to disclose a public record.'},
+  {front: 'TRE 803(11) — Records of Religious Organizations', back: 'Statements of births, marriages, deaths, etc., kept in regularly maintained religious records.'},
+  {front: 'TRE 803(12) — Marriage, Baptismal, and Similar Certificates', back: 'Certificate of fact made by authorized person performing the act per legal duty.'},
+  {front: 'TRE 803(13) — Family Records', back: 'Statements about personal or family history contained in family Bibles, genealogies, or inscriptions.'},
+  {front: 'TRE 803(14) — Records of Documents Affecting an Interest in Property', back: 'Recorded document establishing or affecting property interest, kept in public office.'},
+  {front: 'TRE 803(15) — Statements in Documents Affecting Property Interests', back: 'Statements relevant to a document’s purpose, affecting property interest, undisputed since execution.'},
+  {front: 'TRE 803(16) — Statements in Ancient Documents', back: 'Statements in document prepared before Jan. 1, 1998, with established authenticity.'},
+  {front: 'TRE 803(17) — Market Reports and Similar Publications', back: 'Market quotations, lists, or compilations relied on by the public or those in an occupation.'},
+  {front: 'TRE 803(18) — Learned Treatises', back: 'Statements from a reliable authority in a field, relied on by an expert; read into evidence only.'},
+  {front: 'TRE 803(19) — Reputation Concerning Personal or Family History', back: 'Reputation among family or community about personal or family history (birth, marriage, etc.).'},
+  {front: 'TRE 803(20) — Reputation Concerning Boundaries or General History', back: 'Community reputation about land boundaries, customs, or historical events important to that community.'},
+  {front: 'TRE 803(21) — Reputation Concerning Character', back: 'Reputation among associates or community concerning a person’s character.'},
+  {front: 'TRE 803(22) — Judgment of a Previous Conviction', back: 'Final felony conviction judgment to prove essential facts, if offered against the defendant; must not be on appeal.'},
+  {front: 'TRE 803(23) — Judgments Involving Personal, Family, or General History, or Boundary', back: 'Judgment admitted to prove matters of personal/family history or boundary essential to judgment.'},
+  {front: 'TRE 803(24) — Statement Against Interest', back: 'Statement so against declarant’s interest that a reasonable person wouldn’t have made it unless true.'}
+];
+
+let index = 0;
+let showingBack = false;
+
+function renderCard() {
+  const card = document.getElementById('flashcard');
+  card.textContent = showingBack ? cards[index].back : cards[index].front;
+}
+
+function flipCard() {
+  showingBack = !showingBack;
+  renderCard();
+}
+
+function nextCard() {
+  index = (index + 1) % cards.length;
+  showingBack = false;
+  renderCard();
+}
+
+function prevCard() {
+  index = (index - 1 + cards.length) % cards.length;
+  showingBack = false;
+  renderCard();
+}
+
+function shuffleCards() {
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  index = 0;
+  showingBack = false;
+  renderCard();
+}
+
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+}
+
+renderCard();
+</script>
+</body>
+</html>
